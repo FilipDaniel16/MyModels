@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filip's Sora AI - AI Video Generator & Feed</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #444;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .app-logo {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .app-title {
+            font-size: 1.2em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .app-subtitle {
+            font-size: 0.75em;
+            color: #999;
+        }
+
+        .user-section {
+            background: #0f3460;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            background: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .user-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .user-email {
+            font-size: 0.8em;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        #googleSignInBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .logout-btn {
+            background: #f44336;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav-btn {
+            padding: 12px 20px;
+            border: 2px solid #667eea;
+            background: transparent;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .nav-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .content-section {
+            flex: 1;
+            display: none;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .content-section.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== VIDEO FEED (TikTok Style) ===== */
+        .feed-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .video-card {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 600px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-player {
+            flex: 1;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-player video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+        }
+
+        .video-controls {
+            position: absolute;
+            right: 15px;
+            bottom: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5em;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .control-btn.liked {
+            background: #f44336;
+            color: white;
+        }
+
+        .control-count {
+            font-size: 0.8em;
+            text-align: center;
+            color: #fff;
+        }
+
+        .video-info {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .video-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .video-author {
+            font-size: 0.9em;
+            color: #aaa;
+        }
+
+        /* ===== GENERATOR SECTION ===== */
+        .generator-container {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .generator-section {
+            background: #1a1a2e;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ddd;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #444;
+            background: #0f3460;
+            color: #fff;
+            border-radius: 8px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1em;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #1a3a52;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 12px;
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .file-upload-label:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #764ba2;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #444;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .settings-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .api-key-section {
+            background: #0f3460;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .api-key-label {
+            font-size: 0.85em;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .api-key-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            background: #1a1a2e;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 0.85em;
+        }
+
+        .success-message {
+            background: #4caf50;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .error-message {
+            background: #f44336;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #444;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 250px;
+            }
+
+            .video-card {
+                max-width: 100%;
+                height: 500px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .app-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 150px;
+                overflow-x: auto;
+            }
+
+            .nav-buttons {
+                flex-direction: row;
+            }
+
+            .main-content {
+                height: calc(100vh - 150px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="app-header">
+                <div class="app-logo">🤖✨</div>
+                <div class="app-title">Filip's Sora AI</div>
+                <div class="app-subtitle">Video Generator & Feed</div>
+            </div>
+
+            <!-- USER SECTION -->
+            <div class="user-section" id="userSection" style="display: none;">
+                <div class="user-avatar" id="userAvatar">👤</div>
+                <div class="user-name" id="userName">User</div>
+                <div class="user-email" id="userEmail">user@example.com</div>
+                <button class="logout-btn" onclick="logout()">Sign Out</button>
+            </div>
+
+            <!-- GOOGLE SIGN IN -->
+            <div id="googleSignInContainer" style="margin-bottom: 20px;">
+                <button id="googleSignInBtn" onclick="googleSignIn()">
+                    🔐 Sign in with Google
+                </button>
+            </div>
+
+            <!-- NAV BUTTONS -->
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="switchSection('feed')">📹 Video Feed</button>
+                <button class="nav-btn" onclick="switchSection('text-to-video')">✍️ Text-to-Video</button>
+                <button class="nav-btn" onclick="switchSection('image-to-video')">🖼️ Image-to-Video</button>
+                <button class="nav-btn" onclick="switchSection('settings')">⚙️ Settings</button>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- VIDEO FEED SECTION -->
+            <div id="feed" class="content-section active">
+                <div class="feed-container">
+                    <div class="video-card">
+                        <div class="video-player">
+                            <div class="video-placeholder" id="videoPlaceholder">🎬</div>
+                            <video id="mainVideo" style="display: none;"></video>
+                        </div>
+                        <div class="video-controls">
+                            <div>
+                                <button class="control-btn" id="likeBtn" onclick="toggleLike()">❤️</button>
+                                <div class="control-count" id="likeCount">0</div>
+                            </div>
+                            <button class="control-btn" onclick="shareVideo()">📤</button>
+                            <button class="control-btn" onclick="nextVideo()">➡️</button>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title" id="videoTitle">Welcome to Filip's Sora AI</div>
+                            <div class="video-author" id="videoAuthor">Generated with Sora 2</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEXT-TO-VIDEO SECTION -->
+            <div id="text-to-video" class="content-section">
+                <div class="generator-container">
+                    <div class="success-message" id="successMessage"></div>
+                    <div class="error-message" id="errorMessage"></div>
+
+                    <div class="generator-section">
+                        <div class="section-title">✍️ Text to Video Generator</div>
+
+                        <div class="api-key-section">
+                            <div class="api-key-label">OpenAI API Key (Required)</div>
+                            <input type="password" class="api-key-input" id="apiKey" placeholder="sk-...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Video Description</label>
+                            <textarea class="form-textarea" id="textPrompt" placeholder="Describe the video you want to generate...&#10;Example: A golden retriever playing fetch in a sunny park with slow motion"></textarea>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="form-group">
+                                <label class="form-label">Model</label>
+                                <select class="form-select" id="textModel">
+                                    <option value="sora-2">Sora 2 (Standard)</option>
+                                    <option value="sora-2-pro">Sora 2 Pro (Premium)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Duration (seconds)</label>
+                                <select class="form-select" id="textDuration">
+                                    <option value="4">4 seconds</option>
+                                    <option value="8" selected>8 seconds</option>
+                                    <option value="12">12 seconds</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="form-group">
+                                <label class="form-label">Aspect Ratio</label>
+                                <select class="form-select" id="textAspectRatio">
+                                    <option value="1280x720">16:9 (Landscape)</option>
+                                    <option value="720x1280">9:16 (Portrait)</option>
+                                    <option value="1024x1024">1:1 (Square)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Quality</label>
+                                <select class="form-select" id="textQuality">
+                                    <option value="720p">720p</option>
+                                    <option value="1080p">1080p (Pro only)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button class="generate-btn" id="textGenerateBtn" onclick="generateTextToVideo()">
+                            Generate Video
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IMAGE-TO-VIDEO SECTION -->
+            <div id="image-to-video" class="content-section">
+                <div class="generator-container">
+                    <div class="success-message" id="successMessage2"></div>
+                    <div class="error-message" id="errorMessage2"></div>
+
+                    <div class="generator-section">
+                        <div class="section-title">🖼️ Image to Video Generator</div>
+
+                        <div class="api-key-section">
+                            <div class="api-key-label">OpenAI API Key (Required)</div>
+                            <input type="password" class="api-key-input" id="apiKey2" placeholder="sk-...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Upload Image</label>
+                            <div class="file-upload">
+                                <input type="file" id="imageInput" accept="image/*" onchange="previewImage()">
+                                <label class="file-upload-label" for="imageInput">
+                                    📸 Click to upload or drag & drop
+                                </label>
+                            </div>
+                            <div id="imagePreview" style="margin-top: 15px; text-align: center; display: none;">
+                                <img id="previewImg" style="max-width: 200px; border-radius: 8px;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Motion Description (How the image should move)</label>
+                            <textarea class="form-textarea" id="motionPrompt" placeholder="Describe the motion/animation...&#10;Example: The dog starts running from left to right with dynamic camera following motion"></textarea>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="form-group">
+                                <label class="form-label">Model</label>
+                                <select class="form-select" id="imageModel">
+                                    <option value="sora-2">Sora 2 (Standard)</option>
+                                    <option value="sora-2-pro">Sora 2 Pro (Premium)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Duration (seconds)</label>
+                                <select class="form-select" id="imageDuration">
+                                    <option value="4">4 seconds</option>
+                                    <option value="8" selected>8 seconds</option>
+                                    <option value="12">12 seconds</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="form-group">
+                                <label class="form-label">Aspect Ratio</label>
+                                <select class="form-select" id="imageAspectRatio">
+                                    <option value="1280x720">16:9 (Landscape)</option>
+                                    <option value="720x1280">9:16 (Portrait)</option>
+                                    <option value="1024x1024">1:1 (Square)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Quality</label>
+                                <select class="form-select" id="imageQuality">
+                                    <option value="720p">720p</option>
+                                    <option value="1080p">1080p (Pro only)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button class="generate-btn" id="imageGenerateBtn" onclick="generateImageToVideo()">
+                            Generate Video
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SETTINGS SECTION -->
+            <div id="settings" class="content-section">
+                <div class="generator-container">
+                    <div class="generator-section">
+                        <div class="section-title">⚙️ Settings</div>
+
+                        <div class="form-group">
+                            <label class="form-label">OpenAI API Key</label>
+                            <input type="password" class="api-key-input" id="settingsApiKey" placeholder="sk-..." value="">
+                            <button class="generate-btn" onclick="saveApiKey()" style="margin-top: 10px;">Save API Key</button>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Default Model</label>
+                            <select class="form-select" id="defaultModel">
+                                <option value="sora-2">Sora 2 (Standard)</option>
+                                <option value="sora-2-pro">Sora 2 Pro (Premium)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Default Duration</label>
+                            <select class="form-select" id="defaultDuration">
+                                <option value="4">4 seconds</option>
+                                <option value="8" selected>8 seconds</option>
+                                <option value="12">12 seconds</option>
+                            </select>
+                        </div>
+
+                        <button class="generate-btn" onclick="saveSettings()">Save Settings</button>
+                    </div>
+
+                    <div class="generator-section">
+                        <div class="section-title">📊 Your Videos</div>
+                        <div id="videosList" style="max-height: 400px; overflow-y: auto;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== STATE MANAGEMENT =====
+        let currentUser = null;
+        let apiKey = localStorage.getItem('sora-ai-api-key') || '';
+        let videos = JSON.parse(localStorage.getItem('sora-ai-videos')) || [];
+        let currentVideoIndex = 0;
+        let likedVideos = JSON.parse(localStorage.getItem('sora-ai-liked-videos')) || [];
+
+        // ===== GOOGLE SIGN IN =====
+        function googleSignIn() {
+            // Mock Google Sign In - In production, use Google Sign-In API
+            currentUser = {
+                name: 'Filip Daniel',
+                email: 'filipkodaniel2000@gmail.com',
+                avatar: '👤'
+            };
+            updateUserUI();
+            saveToLocalStorage();
+        }
+
+        function logout() {
+            currentUser = null;
+            updateUserUI();
+            saveToLocalStorage();
+        }
+
+        function updateUserUI() {
+            const userSection = document.getElementById('userSection');
+            const signInBtn = document.getElementById('googleSignInContainer');
+            
+            if (currentUser) {
+                userSection.style.display = 'block';
+                signInBtn.style.display = 'none';
+                document.getElementById('userName').textContent = currentUser.name;
+                document.getElementById('userEmail').textContent = currentUser.email;
+            } else {
+                userSection.style.display = 'none';
+                signInBtn.style.display = 'block';
+            }
+        }
+
+        // ===== NAVIGATION =====
+        function switchSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            
+            // Deactivate all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Activate corresponding nav button
+            event.target.classList.add('active');
+        }
+
+        // ===== VIDEO FEED =====
+        function loadVideoFeed() {
+            if (videos.length > 0) {
+                displayVideo(currentVideoIndex);
+            } else {
+                showPlaceholder();
+            }
+        }
+
+        function displayVideo(index) {
+            if (index < 0 || index >= videos.length) {
+                currentVideoIndex = 0;
+                displayVideo(0);
+                return;
+            }
+
+            const video = videos[index];
+            const videoPlayer = document.getElementById('mainVideo');
+            const videoPlaceholder = document.getElementById('videoPlaceholder');
+            const videoTitle = document.getElementById('videoTitle');
+            const videoAuthor = document.getElementById('videoAuthor');
+            const likeBtn = document.getElementById('likeBtn');
+
+            videoPlaceholder.style.display = 'none';
+            videoPlayer.style.display = 'block';
+            videoPlayer.src = video.url;
+            videoTitle.textContent = video.title || 'Generated Video';
+            videoAuthor.textContent = `Model: ${video.model}`;
+
+            updateLikeButton(video.id);
+        }
+
+        function showPlaceholder() {
+            document.getElementById('videoPlaceholder').style.display = 'flex';
+            document.getElementById('mainVideo').style.display = 'none';
+        }
+
+        function toggleLike() {
+            if (videos.length === 0) return;
+
+            const video = videos[currentVideoIndex];
+            const likeBtn = document.getElementById('likeBtn');
+            const likeCount = document.getElementById('likeCount');
+
+            if (likedVideos.includes(video.id)) {
+                likedVideos = likedVideos.filter(id => id !== video.id);
+                likeBtn.classList.remove('liked');
+            } else {
+                likedVideos.push(video.id);
+                likeBtn.classList.add('liked');
+            }
+
+            updateLikeCount();
+            saveToLocalStorage();
+        }
+
+        function updateLikeButton(videoId) {
+            const likeBtn = document.getElementById('likeBtn');
+            if (likedVideos.includes(videoId)) {
+                likeBtn.classList.add('liked');
+            } else {
+                likeBtn.classList.remove('liked');
+            }
+            updateLikeCount();
+        }
+
+        function updateLikeCount() {
+            document.getElementById('likeCount').textContent = likedVideos.length;
+        }
+
+        function shareVideo() {
+            if (videos.length === 0) {
+                alert('No video to share!');
+                return;
+            }
+
+            const video = videos[currentVideoIndex];
+            const shareText = `Check out this awesome AI-generated video from Filip's Sora AI! 🤖✨`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Filip\'s Sora AI',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                alert('Copied to clipboard: ' + shareText);
+            }
+        }
+
+        function nextVideo() {
+            currentVideoIndex = (currentVideoIndex + 1) % (videos.length || 1);
+            loadVideoFeed();
+        }
+
+        // ===== TEXT-TO-VIDEO GENERATION =====
+        function generateTextToVideo() {
+            const prompt = document.getElementById('textPrompt').value;
+            const model = document.getElementById('textModel').value;
+            const duration = document.getElementById('textDuration').value;
+            const aspectRatio = document.getElementById('textAspectRatio').value;
+
+            if (!prompt.trim()) {
+                showError('Please enter a video description', 'errorMessage');
+                return;
+            }
+
+            if (!apiKey && !document.getElementById('apiKey').value) {
+                showError('Please enter your OpenAI API Key', 'errorMessage');
+                return;
+            }
+
+            const btn = document.getElementById('textGenerateBtn');
+            btn.disabled = true;
+            btn.textContent = 'Generating...';
+
+            // Simulate API call
+            setTimeout(() => {
+                const videoId = 'video-' + Date.now();
+                const newVideo = {
+                    id: videoId,
+                    title: prompt.substring(0, 50) + '...',
+                    description: prompt,
+                    model: model,
+                    duration: duration,
+                    type: 'text-to-video',
+                    url: 'https://via.placeholder.com/' + aspectRatio + '?text=AI+Video',
+                    createdAt: new Date().toLocaleString()
+                };
+
+                videos.unshift(newVideo);
+                saveToLocalStorage();
+
+                showSuccess('Video generated successfully! Check the feed.', 'successMessage');
+                document.getElementById('textPrompt').value = '';
+
+                btn.disabled = false;
+                btn.textContent = 'Generate Video';
+
+                // Switch to feed
+                setTimeout(() => {
+                    document.getElementById('feed').classList.add('active');
+                    document.getElementById('text-to-video').classList.remove('active');
+                    loadVideoFeed();
+                }, 1000);
+            }, 2000);
+        }
+
+        // ===== IMAGE-TO-VIDEO GENERATION =====
+        function previewImage() {
+            const file = document.getElementById('imageInput').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function generateImageToVideo() {
+            const file = document.getElementById('imageInput').files[0];
+            const motionPrompt = document.getElementById('motionPrompt').value;
+            const model = document.getElementById('imageModel').value;
+            const duration = document.getElementById('imageDuration').value;
+            const aspectRatio = document.getElementById('imageAspectRatio').value;
+
+            if (!file) {
+                showError('Please upload an image', 'errorMessage2');
+                return;
+            }
+
+            if (!motionPrompt.trim()) {
+                showError('Please describe the motion', 'errorMessage2');
+                return;
+            }
+
+            if (!apiKey && !document.getElementById('apiKey2').value) {
+                showError('Please enter your OpenAI API Key', 'errorMessage2');
+                return;
+            }
+
+            const btn = document.getElementById('imageGenerateBtn');
+            btn.disabled = true;
+            btn.textContent = 'Generating...';
+
+            // Simulate API call
+            setTimeout(() => {
+                const videoId = 'video-' + Date.now();
+                const newVideo = {
+                    id: videoId,
+                    title: 'Image to Video: ' + motionPrompt.substring(0, 30) + '...',
+                    description: motionPrompt,
+                    model: model,
+                    duration: duration,
+                    type: 'image-to-video',
+                    url: 'https://via.placeholder.com/' + aspectRatio + '?text=AI+Video',
+                    createdAt: new Date().toLocaleString()
+                };
+
+                videos.unshift(newVideo);
+                saveToLocalStorage();
+
+                showSuccess('Video generated successfully! Check the feed.', 'successMessage2');
+                document.getElementById('motionPrompt').value = '';
+                document.getElementById('imageInput').value = '';
+                document.getElementById('imagePreview').style.display = 'none';
+
+                btn.disabled = false;
+                btn.textContent = 'Generate Video';
+
+                // Switch to feed
+                setTimeout(() => {
+                    document.getElementById('feed').classList.add('active');
+                    document.getElementById('image-to-video').classList.remove('active');
+                    loadVideoFeed();
+                }, 1000);
+            }, 2000);
+        }
+
+        // ===== SETTINGS =====
+        function saveApiKey() {
+            apiKey = document.getElementById('settingsApiKey').value;
+            if (apiKey.trim()) {
+                localStorage.setItem('sora-ai-api-key', apiKey);
+                showSuccess('API Key saved successfully!', 'successMessage');
+            }
+        }
+
+        function saveSettings() {
+            const defaultModel = document.getElementById('defaultModel').value;
+            const defaultDuration = document.getElementById('defaultDuration').value;
+
+            localStorage.setItem('sora-ai-default-model', defaultModel);
+            localStorage.setItem('sora-ai-default-duration', defaultDuration);
+
+            showSuccess('Settings saved successfully!', 'successMessage');
+        }
+
+        // ===== UTILITIES =====
+        function showSuccess(message, elementId) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.style.display = 'block';
+            setTimeout(() => {
+                el.style.display = 'none';
+            }, 3000);
+        }
+
+        function showError(message, elementId) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.style.display = 'block';
+            setTimeout(() => {
+                el.style.display = 'none';
+            }, 3000);
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('sora-ai-videos', JSON.stringify(videos));
+            localStorage.setItem('sora-ai-liked-videos', JSON.stringify(likedVideos));
+        }
+
+        // ===== INIT =====
+        window.addEventListener('load', () => {
+            loadVideoFeed();
+            updateLikeCount();
+        });
+    </script>
+</body>
+</html>
