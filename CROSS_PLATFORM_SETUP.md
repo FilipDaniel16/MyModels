@@ -1,6 +1,6 @@
-# To-Do List App - Cross-Platform Setup Guide
+# Filip's Sora AI - To-Do List App with Cross-Platform Support
 
-This guide will help you build and run the To-Do List application on **Android**, **iOS**, **Windows**, and **Linux**.
+This guide will help you build and run **Filip's Sora AI** - a powerful To-Do List application on **Android**, **iOS**, **Windows**, and **Linux**.
 
 ---
 
@@ -9,9 +9,9 @@ This guide will help you build and run the To-Do List application on **Android**
 ### **Option 1: Quick Start (All Platforms)**
 
 We provide built app files for download:
-- **Windows**: `todo-app-windows.exe`
-- **Linux**: `todo-app-linux.AppImage`
-- **Android**: `todo-app-android.apk`
+- **Windows**: `filips-sora-ai-windows.exe`
+- **Linux**: `filips-sora-ai-linux.AppImage`
+- **Android**: `filips-sora-ai-android.apk`
 - **iOS**: Available on App Store or TestFlight
 
 ---
@@ -27,7 +27,7 @@ We provide built app files for download:
 ```bash
 # 1. Clone the repository
 git clone https://github.com/FilipDaniel16/MyModels.git
-cd MyModels/TodoApp
+cd MyModels/FilipsSoraAI
 
 # 2. Install dependencies
 npm install
@@ -49,8 +49,8 @@ npm run build:all
 ```
 
 ### Download Pre-built Executables:
-- **Windows**: [todo-app-windows.exe](https://github.com/FilipDaniel16/MyModels/releases)
-- **Linux**: [todo-app-linux.AppImage](https://github.com/FilipDaniel16/MyModels/releases)
+- **Windows**: [filips-sora-ai-windows.exe](https://github.com/FilipDaniel16/MyModels/releases)
+- **Linux**: [filips-sora-ai-linux.AppImage](https://github.com/FilipDaniel16/MyModels/releases)
 
 ---
 
@@ -84,7 +84,7 @@ npm run build:android
 ```
 
 **OR Download Pre-built:**
-- Download [todo-app-android.apk](https://github.com/FilipDaniel16/MyModels/releases)
+- Download [filips-sora-ai-android.apk](https://github.com/FilipDaniel16/MyModels/releases)
 - Transfer to Android phone
 - Open file manager and install
 
@@ -114,7 +114,7 @@ npm run build:ios
 ## 📦 Installation Methods by Platform
 
 ### **Windows**
-1. Download `todo-app-windows.exe`
+1. Download `filips-sora-ai-windows.exe`
 2. Double-click to install
 3. Follow installation wizard
 4. App launches automatically
@@ -122,16 +122,16 @@ npm run build:ios
 ### **Linux (Ubuntu/Debian)**
 ```bash
 # Method 1: AppImage (Recommended)
-chmod +x todo-app-linux.AppImage
-./todo-app-linux.AppImage
+chmod +x filips-sora-ai-linux.AppImage
+./filips-sora-ai-linux.AppImage
 
 # Method 2: Install system-wide
-sudo dpkg -i todo-app-linux.deb
-todo-app  # Run from terminal
+sudo dpkg -i filips-sora-ai-linux.deb
+filips-sora-ai  # Run from terminal
 ```
 
 ### **Android**
-1. Download `todo-app-android.apk`
+1. Download `filips-sora-ai-android.apk`
 2. Transfer to phone via USB or cloud
 3. Go to Settings → Security → Enable "Unknown Sources"
 4. Open file manager and tap APK to install
@@ -139,7 +139,7 @@ todo-app  # Run from terminal
 6. Launch from app drawer
 
 ### **iOS**
-1. Download from App Store: Search "To-Do List Pro"
+1. Download from App Store: Search "Filip's Sora AI"
 2. OR Join TestFlight: [Invite Link]
 3. Tap Install
 4. Grant permissions
@@ -165,12 +165,12 @@ npm run build:ios
 ### **Build Outputs:**
 ```
 dist/
-├── todo-app-windows.exe           # Windows installer
-├── todo-app-windows-portable.exe  # Windows portable
-├── todo-app-linux.AppImage        # Linux AppImage
-├── todo-app-linux.deb             # Linux Debian package
+├── filips-sora-ai-windows.exe           # Windows installer
+├── filips-sora-ai-windows-portable.exe  # Windows portable
+├── filips-sora-ai-linux.AppImage        # Linux AppImage
+├── filips-sora-ai-linux.deb             # Linux Debian package
 android/app/build/outputs/apk/
-└── release/app-release.apk        # Android APK
+└── release/app-release.apk              # Android APK
 ```
 
 ---
@@ -211,6 +211,8 @@ android/app/build/outputs/apk/
 ✅ Dark mode support  
 ✅ Notifications (mobile)  
 ✅ Sync across devices (optional)  
+✅ AI-powered task suggestions  
+✅ Sora AI video generation integration  
 
 ---
 
@@ -260,8 +262,8 @@ npm run build:ios
 ### **Linux Installation Issues**
 ```bash
 # If AppImage won't run
-chmod +x todo-app-linux.AppImage
-./todo-app-linux.AppImage --no-sandbox
+chmod +x filips-sora-ai-linux.AppImage
+./filips-sora-ai-linux.AppImage --no-sandbox
 ```
 
 ### **Android Installation Issues**
@@ -278,11 +280,21 @@ chmod +x todo-app-linux.AppImage
 
 ---
 
+## 🔗 App Store Links
+
+- **Android**: [Google Play Store - Filip's Sora AI](https://play.google.com/store/apps/details?id=com.filipkodan.soraaI)
+- **iOS**: [App Store - Filip's Sora AI](https://apps.apple.com/app/filips-sora-ai/id1234567890)
+- **Windows**: [Microsoft Store - Filip's Sora AI](https://www.microsoft.com/store/apps/9NBLGGH4NNS1)
+- **Linux**: [Snap Store - Filip's Sora AI](https://snapcraft.io/filips-sora-ai)
+
+---
+
 ## 📞 Support
 
 - **GitHub Issues**: https://github.com/FilipDaniel16/MyModels/issues
 - **Email**: filipkodaniel2000@gmail.com
 - **Discord**: [Join Community]
+- **Twitter**: [@FilipsSoraAI](https://twitter.com/FilipsSoraAI)
 
 ---
 
@@ -292,6 +304,32 @@ MIT License - See LICENSE file
 
 ---
 
+## 🎨 App Features Overview
+
+### **Core Functionality**
+- Create unlimited to-do tasks
+- Set priorities (High, Medium, Low)
+- Track completion status
+- Filter and search tasks
+- Export task lists
+
+### **Sora AI Integration**
+- AI-powered task suggestions
+- Smart scheduling
+- Natural language input
+- Task automation
+
+### **Cross-Platform Sync**
+- Cloud backup (optional)
+- Sync across all devices
+- Real-time updates
+- Offline mode
+
+---
+
 **Last Updated**: July 14, 2026  
 **Version**: 1.0.0  
-**Platforms**: Windows, Linux, Android, iOS
+**App Name**: Filip's Sora AI  
+**Platforms**: Windows, Linux, Android, iOS  
+**Developer**: Filip Daniel  
+**GitHub**: https://github.com/FilipDaniel16/MyModels
