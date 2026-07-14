@@ -1,0 +1,198 @@
+{
+  "models": [
+    {
+      "id": "sora-2",
+      "name": "Sora 2",
+      "provider": "OpenAI",
+      "type": "video-generation",
+      "description": "Standard video generation model optimized for speed and social media content",
+      "capabilities": {
+        "text_to_video": true,
+        "image_to_video": true,
+        "audio_generation": true,
+        "character_consistency": false,
+        "video_extension": true,
+        "video_editing": true
+      },
+      "specifications": {
+        "max_resolution": "720p",
+        "max_dimensions": "1280x720",
+        "max_duration_seconds": 12,
+        "aspect_ratios": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ]
+      },
+      "pricing": {
+        "currency": "USD",
+        "unit": "per_second",
+        "base_rate": 0.10,
+        "example_costs": {
+          "4_second_720p": 0.40,
+          "8_second_720p": 0.80,
+          "12_second_720p": 1.20
+        }
+      },
+      "use_cases": [
+        "Social media content",
+        "Quick drafts",
+        "Testing and iteration",
+        "Short-form video",
+        "Marketing teasers"
+      ],
+      "best_for": "Fast iteration, social content, cost-effective generation",
+      "status": "production",
+      "api_endpoint": "/v1/videos",
+      "documentation_url": "https://developers.openai.com/api/docs/guides/video-generation",
+      "model_url": "https://developers.openai.com/api/docs/models/sora-2",
+      "features": {
+        "text_prompt": {
+          "supported": true,
+          "description": "Generate videos from natural language descriptions"
+        },
+        "image_reference": {
+          "supported": true,
+          "description": "Use reference images as input"
+        },
+        "synchronized_audio": {
+          "supported": true,
+          "description": "Automatic audio generation matching video content"
+        },
+        "multiple_aspect_ratios": {
+          "supported": true,
+          "description": "Support for landscape, portrait, and square formats"
+        }
+      },
+      "limits": {
+        "max_requests_per_minute": "Varies by tier",
+        "max_video_length": "12 seconds",
+        "concurrent_generations": "Limited by tier"
+      },
+      "deprecation": {
+        "deprecated": false,
+        "sunset_date": "2026-09-24",
+        "note": "Model will be deprecated on September 24, 2026"
+      }
+    },
+    {
+      "id": "sora-2-pro",
+      "name": "Sora 2 Pro",
+      "provider": "OpenAI",
+      "type": "video-generation",
+      "description": "Professional video generation model optimized for cinematic quality and commercial projects",
+      "capabilities": {
+        "text_to_video": true,
+        "image_to_video": true,
+        "audio_generation": true,
+        "character_consistency": true,
+        "video_extension": true,
+        "video_editing": true
+      },
+      "specifications": {
+        "max_resolution": "1080p",
+        "max_dimensions": "1920x1080",
+        "max_duration_seconds": 20,
+        "aspect_ratios": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ]
+      },
+      "pricing": {
+        "currency": "USD",
+        "unit": "per_second",
+        "resolution_rates": {
+          "720p": 0.30,
+          "1024p": 0.50,
+          "1080p": 0.70
+        },
+        "example_costs": {
+          "12_second_720p": 3.60,
+          "12_second_1024p": 6.00,
+          "12_second_1080p": 8.40
+        }
+      },
+      "use_cases": [
+        "Commercial advertising",
+        "Studio production",
+        "High-end marketing",
+        "Professional video editing",
+        "Cinematic content",
+        "Product demonstrations",
+        "Brand storytelling"
+      ],
+      "best_for": "Commercial projects, cinematic quality, high-detail scenes, professional use",
+      "status": "production",
+      "api_endpoint": "/v1/videos",
+      "documentation_url": "https://developers.openai.com/api/docs/guides/video-generation",
+      "model_url": "https://developers.openai.com/api/docs/models/sora-2-pro",
+      "features": {
+        "text_prompt": {
+          "supported": true,
+          "description": "Generate videos from natural language descriptions"
+        },
+        "image_reference": {
+          "supported": true,
+          "description": "Use reference images as input"
+        },
+        "synchronized_audio": {
+          "supported": true,
+          "description": "Automatic audio generation matching video content"
+        },
+        "character_consistency": {
+          "supported": true,
+          "description": "Maintain consistent characters across multiple videos"
+        },
+        "advanced_physics": {
+          "supported": true,
+          "description": "More realistic physics simulation"
+        },
+        "enhanced_lighting": {
+          "supported": true,
+          "description": "Better lighting and shadow rendering"
+        },
+        "detailed_faces": {
+          "supported": true,
+          "description": "More detailed facial expressions and features"
+        },
+        "smooth_motion": {
+          "supported": true,
+          "description": "Smoother transitions and motion flows"
+        },
+        "video_extension": {
+          "supported": true,
+          "description": "Continue existing videos up to 20 seconds total"
+        }
+      },
+      "limits": {
+        "max_requests_per_minute": "Varies by tier",
+        "max_video_length": "20 seconds (with extensions)",
+        "concurrent_generations": "Limited by tier"
+      },
+      "quality_improvements": [
+        "Cinematic video quality",
+        "Advanced physics simulation",
+        "Higher resolution output (up to 1080p)",
+        "Better lighting and shadow rendering",
+        "More detailed facial expressions",
+        "Smoother motion and transitions",
+        "Character consistency across scenes",
+        "Extended video length capabilities"
+      ],
+      "deprecation": {
+        "deprecated": false,
+        "sunset_date": "2026-09-24",
+        "note": "Model will be deprecated on September 24, 2026"
+      }
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2026-07-14",
+    "total_models": 2,
+    "categories": {
+      "video_generation": 2
+    }
+  }
+}
