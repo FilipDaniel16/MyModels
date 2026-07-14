@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List App</title>
+    <title>Filip's Sora AI - To-Do List App</title>
     <style>
         * {
             margin: 0;
@@ -42,15 +42,29 @@
             }
         }
 
+        .app-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .app-logo {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
         h1 {
             color: #333;
-            margin-bottom: 30px;
-            text-align: center;
-            font-size: 2em;
+            font-size: 1.8em;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+        }
+
+        .app-subtitle {
+            font-size: 0.9em;
+            color: #999;
+            margin-top: 5px;
         }
 
         .input-section {
@@ -375,7 +389,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>📝 To-Do List</h1>
+        <div class="app-header">
+            <div class="app-logo">🤖✨</div>
+            <h1>Filip's Sora AI</h1>
+            <div class="app-subtitle">Powered by OpenAI Sora & AI Intelligence</div>
+        </div>
 
         <div class="input-section">
             <input 
@@ -425,7 +443,7 @@
     </div>
 
     <script>
-        // To-Do List Application with Local Storage
+        // Filip's Sora AI - To-Do List Application with Local Storage
         class TodoApp {
             constructor() {
                 this.todos = [];
@@ -536,7 +554,7 @@
                 const url = URL.createObjectURL(dataBlob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = `todos_${new Date().toISOString().split('T')[0]}.json`;
+                link.download = `filips-sora-ai-todos_${new Date().toISOString().split('T')[0]}.json`;
                 link.click();
                 URL.revokeObjectURL(url);
             }
@@ -609,11 +627,11 @@
             }
 
             saveToStorage() {
-                localStorage.setItem('todos', JSON.stringify(this.todos));
+                localStorage.setItem('filips-sora-ai-todos', JSON.stringify(this.todos));
             }
 
             loadFromStorage() {
-                const stored = localStorage.getItem('todos');
+                const stored = localStorage.getItem('filips-sora-ai-todos');
                 if (stored) {
                     try {
                         this.todos = JSON.parse(stored);
